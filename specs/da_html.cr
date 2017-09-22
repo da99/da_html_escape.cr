@@ -47,7 +47,7 @@ macro assert_unescape(expected, input)
   expected = {{expected}}
   actual   = {{input}}
   if actual.is_a? String
-    ( DA_HTML.unescape(actual) ).should eq(expected)
+    ( DA_HTML.unescape_once(actual) ).should eq(expected)
   else
     actual.should eq(expected)
   end

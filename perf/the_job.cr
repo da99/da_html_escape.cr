@@ -25,7 +25,7 @@ class The_Job
 
   def unescape(cycles)
     cycles.times do
-      @coder.unescape(@encoded)
+      @coder.unescape!(@encoded)
     end
   end
 

@@ -28,7 +28,7 @@ describe ":unescape" do
       ent     = {{x.first}}
       code    = {{x[1]}}
       decoded = {{x.last}}
-      assert_escape "&#x#{code.to_s(16)};", DA_HTML.unescape("&#{ent};")
+      assert_escape "&#x#{code.to_s(16)};", DA_HTML.unescape_once("&#{ent};")
       assert_unescape decoded,                DA_HTML.escape(decoded)
     end
   {% end %}
@@ -99,7 +99,7 @@ describe ":unescape" do
   it "should not mutate string being decoded" do
     original = "&lt;&#163;"
     input = original.dup
-    DA_HTML.unescape(input)
+    DA_HTML.unescape_once(input)
 
     input.should eq(original)
   end
@@ -130,7 +130,7 @@ describe ":unescape" do
 
   it "should decode null character to replacement character: \\u0000" do
     encoded = "&#x0;"
-    decoded = DA_HTML.unescape(encoded) || "error"
+    decoded = DA_HTML.unescape_once(encoded) || "error"
     decoded.codepoints.should eq([65533])
   end
 
@@ -168,7 +168,7 @@ describe ":unescape" do
       &#X00003C; &#X000003C; \x3c \x3C \u003c \u003C
     "
 
-    expected = DA_HTML.unescape( bracket )
+    expected = DA_HTML.unescape_once( bracket )
     if expected
       expected = expected.split.uniq.join
     end
@@ -183,7 +183,7 @@ describe ":unescape string encodings" do
     s = "&#x3c;&eacute;lan&#x3e;"
 
     assert_unescape "<élan>", s
-    assert_not_nil DA_HTML.unescape(s) do |x|
+    assert_not_nil DA_HTML.unescape_once(s) do |x|
       x.valid_encoding?.should eq(true)
     end
   end
@@ -193,7 +193,7 @@ describe ":unescape string encodings" do
     s.valid_encoding?.should eq(true)
 
     assert_unescape "<élan>", s
-    assert_not_nil DA_HTML.unescape(s) do |x|
+    assert_not_nil DA_HTML.unescape_once(s) do |x|
       x.valid_encoding?.should eq(true)
     end
   end

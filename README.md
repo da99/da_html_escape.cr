@@ -50,7 +50,8 @@ Usage:
 
   # Unescaping:
   escaped = "&eacute;lan"
-  DA_HTML.unescape(escaped) # => "élan"
+  DA_HTML.unescape_once(escaped) # => "élan"
+  DA_HTML.unescape!(escaped) # => "élan"
 ```
 
 ## Licence
