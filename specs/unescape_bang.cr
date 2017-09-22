@@ -28,7 +28,7 @@ describe ":unescape!" do
       ent     = {{x.first}}
       code    = {{x[1]}}
       decoded = {{x.last}}
-      assert_escape "&#x#{code.to_s(16)};", DA_HTML.unescape!("&#{ent};")
+      assert_escape "&#x#{code.to_s(16)};", DA_HTML.unescape!("&amp;amp;amp;#{ent};")
       assert_unescape! decoded,             DA_HTML.escape(decoded)
     end
   {% end %}
@@ -97,7 +97,7 @@ describe ":unescape!" do
   end
 
   it "should not mutate string being decoded" do
-    original = "&lt;&#163;"
+    original = "&amp;lt;&#163;"
     input = original.dup
     DA_HTML.unescape!(input)
 
@@ -129,7 +129,7 @@ describe ":unescape!" do
   end
 
   it "should decode null character to replacement character: \\u0000" do
-    encoded = "&#x0;"
+    encoded = "&amp;amp;#x0;"
     decoded = DA_HTML.unescape!(encoded) || "error"
     decoded.codepoints.should eq([65533])
   end
@@ -174,12 +174,12 @@ describe ":unescape!" do
   it "should decode invalid brackets" do
     # %3C 
     bracket = "
-      < &lt &lt; &LT &LT; &#60 &#060 &#0060
+      < &lt &lt; &LT &LT; &amp;#60 &#60 &#060 &#0060
       &#00060 &#000060 &#0000060 &#60; &#060; &#0060; &#00060;
       &#000060; &#0000060; &#x3c &#x03c &#x003c &#x0003c &#x00003c
-      &#x000003c &#x3c; &#x03c; &#x003c; &#x0003c; &#x00003c;
+      &#x000003c &#x3c; &amp;#x03c; &#x003c; &#x0003c; &#x00003c;
       &#x000003c; &#X3c &#X03c &#X003c &#X0003c &#X00003c &#X000003c
-      &#X3c; &#X03c; &#X003c; &#X0003c; &#X00003c; &#X000003c;
+      &#X3c; &#X03c; &#X003c; &amp;amp;#X0003c; &#X00003c; &#X000003c;
       &#x3C &#x03C &#x003C &#x0003C &#x00003C &#x000003C &#x3C; &#x03C;
       &#x003C; &#x0003C; &#x00003C; &#x000003C; &#X3C &#X03C
       &#X003C &#X0003C &#X00003C &#X000003C &#X3C; &#X03C; &#X003C; &#X0003C;
