@@ -63,9 +63,8 @@ This code is free to use under the terms of the MIT licence. See the file
 ```
 $ crystal run perf/benchmark.cr --release --no-debug
   # 100 iterations
-                  user     system      total        real
-  Encoding:   2.970000   0.180000   3.150000 (  3.123603)
-  Decoding:   0.760000   0.000000   0.760000 (  0.769839)
+  Encoding:   1.500000   0.080000   1.580000 (  1.672580)
+  Decoding:   0.750000   0.010000   0.760000 (  0.771560)
 
 $ ruby perf/benchmark.rb # htmlentities (Ruby gem)
   # 100 iterations
