@@ -1,14 +1,18 @@
 
 module DA_HTML
 
+  macro to_hex_entity(str)
+    "&#x#{{{str}}.codepoints.map { |x| x.to_s(16) }.join};"
+  end # === macro to_hex_entity
+
   REGEX_UNSAFE_CHARS = /[^\ -~\n]+|[<>'"&]+/
 
   CHAR_HEX = {
-    60 => "<".codepoints.first.to_s(16),
-    62 => ">".codepoints.first.to_s(16),
-    39 => "'".codepoints.first.to_s(16),
-    34 => "\"".codepoints.first.to_s(16),
-    38 => "&".codepoints.first.to_s(16)
+    60 => to_hex_entity("<"),
+    62 => to_hex_entity(">"),
+    39 => to_hex_entity("'"),
+    34 => to_hex_entity("\""),
+    38 => to_hex_entity("&")
   }
 
   def escape(source : String)
@@ -17,7 +21,7 @@ module DA_HTML
       .gsub(REGEX_UNSAFE_CHARS){ |match|
       # space == \u{20}=(space) , ~ == \u{7E}
         match.codepoints.map { |x|
-          "&#x#{CHAR_HEX[x]? || x.to_s(16)};"
+          CHAR_HEX[x]? || "&#x#{x.to_s(16)};"
         }.join
       }
   end
