@@ -8,6 +8,12 @@ module DA_HTML
     Myhtml.decode_html_entities(clean(source))
   end
 
+  def unescape!(source : String)
+    str = unescape(source)
+    return str if str == source
+    unescape!(str)
+  end # === def unescape
+
 end # === module DA_HTML
 
 
