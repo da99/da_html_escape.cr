@@ -1,6 +1,10 @@
 
 describe ":escape" do
 
+  it "should replace \"field separator\" (31 ASCII) with a space" do
+    assert_escape "a ", "a\u{1f}"
+  end # === it "should replace \"field separator\" with a space"
+
   it "should encode apos entity" do
     assert_escape "&#x27;", "'"
   end

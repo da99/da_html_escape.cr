@@ -9,6 +9,7 @@ module DA_HTML
     {{s}}.codepoints.first
   end # === macro to_int32
 
+  # space == \u{20}=(space) , ~ == \u{7E}
   SPACE_CODEPOINT = to_int32(" ")
   TILDA_CODEPOINT = to_int32("~")
   NEW_LINE_CODEPOINT = to_int32("\n")
@@ -44,23 +45,14 @@ module DA_HTML
         DOUBLE_SPACE
       when 10 # 10 = new line
         NEW_LINE
-      else
-        if x <= 31 # Control character
+      when 0..31 # Control character
           SPACE
-        else
-          (ASCII_TABLE[x]? && ASCII_TABLE[x]) || CHAR_HEX[x]? || "&#x#{x.to_s(16)};"
-        end
+      else
+        (ASCII_TABLE[x]? && ASCII_TABLE[x]) || CHAR_HEX[x]? || "&#x#{x.to_s(16)};"
       end
 
     }
     new_str.to_s
-    # clean(source)
-    #   .gsub(REGEX_UNSAFE_CHARS){ |match|
-    #   # space == \u{20}=(space) , ~ == \u{7E}
-    #     match.codepoints.map { |x|
-    #       CHAR_HEX[x]? || "&#x#{x.to_s(16)};"
-    #     }.join
-    #   }
   end
 
 end # === module DA_HTML
