@@ -5,14 +5,18 @@ module DA_HTML
     "&#x#{{{str}}.codepoints.map { |x| x.to_s(16) }.join};"
   end # === macro to_hex_entity
 
+  macro to_int32(s)
+    {{s}}.codepoints.first
+  end # === macro to_int32
+
   REGEX_UNSAFE_CHARS = /[^\ -~\n]+|[<>'"&]+/
 
   CHAR_HEX = {
-    60 => to_hex_entity("<"),
-    62 => to_hex_entity(">"),
-    39 => to_hex_entity("'"),
-    34 => to_hex_entity("\""),
-    38 => to_hex_entity("&")
+    to_int32("<")  => to_hex_entity("<"),
+    to_int32(">")  => to_hex_entity(">"),
+    to_int32("'")  => to_hex_entity("'"),
+    to_int32("\"") => to_hex_entity("\""),
+    to_int32("&")  => to_hex_entity("&")
   }
 
   def escape(source : String)
