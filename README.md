@@ -60,16 +60,17 @@ This code is free to use under the terms of the MIT licence. See the file
 
 
 ## Useless Benchmarks:
+
+NOTE: Encoding is twice as slow as using `HTML.escape`
+from the Crystal standard library. The main reason is
+because `DA_HTML` replaces control characters with spaces
+and non-ASCII chars with hexadecimal HTML entities.
+
 ```
 $ crystal run perf/benchmark.cr --release --no-debug
   # 100 iterations
   Encoding:   0.810000   0.050000   0.860000 (  0.891821)
   Decoding:   0.760000   0.000000   0.760000 (  0.780435)
-
-$ ruby perf/benchmark.rb # htmlentities (Ruby gem)
-  # 100 iterations
-  Encoding  8.340000   0.010000   8.350000 (  8.520222)
-  Decoding  3.300000   0.010000   3.310000 (  3.363122)
 
 $ neofetch
   CPU: AMD Athlon 5350 APU with Radeon R3 (4) @ 2.050GHz
