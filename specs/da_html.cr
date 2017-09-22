@@ -53,6 +53,16 @@ macro assert_unescape(expected, input)
   end
 end
 
+macro assert_unescape!(expected, input)
+  expected = {{expected}}
+  actual   = {{input}}
+  if actual.is_a? String
+    ( DA_HTML.unescape!(actual) ).should eq(expected)
+  else
+    actual.should eq(expected)
+  end
+end
+
 def assert_not_nil( x )
   x.should_not eq(nil)
 end # === def assert_not_nil
@@ -66,5 +76,6 @@ def assert_not_nil( x )
 end # === def assert_not_nil
 
 require "./unescape"
+require "./unescape_bang"
 require "./escape"
 
