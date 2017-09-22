@@ -70,8 +70,8 @@ and non-ASCII chars with hexadecimal HTML entities.
 ```
 $ crystal run perf/benchmark.cr --release --no-debug
   # 100 iterations
-  Encoding:   0.810000   0.050000   0.860000 (  0.891821)
-  Decoding:   0.760000   0.000000   0.760000 (  0.780435)
+  Encoding:   0.730000   0.040000   0.770000 (  0.828541)
+  Decoding:   1.820000   0.010000   1.830000 (  1.891078)
 
 $ neofetch
   CPU: AMD Athlon 5350 APU with Radeon R3 (4) @ 2.050GHz
