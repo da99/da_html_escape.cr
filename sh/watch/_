@@ -1,0 +1,51 @@
+#!/usr/bin/env zsh
+#
+# === {{CMD}} specs [args to spec compiled binary]
+# === {{CMD}} specs-run [args to spec compiled binary]
+# === {{CMD}} scrap [args to spec compiled binary]
+# === {{CMD}} scrap-run [args to spec compiled binary]
+#
+set -u -e -o pipefail
+
+local +x ORIGINAL_ARGS="$@"
+if [[ -z "$@" ]]; then
+  set specs
+fi
+
+local +x ACTION="$1"; shift
+case "$ACTION" in
+
+  specs)
+    local +x cmd="da_html.cr watch specs-run $@"
+    ${=cmd} || :
+    process watch "-r bin -r sh -r src -r specs" "$cmd"
+    ;;
+
+  specs-run)
+    reset
+    da_html.cr specs run $@
+    ;;
+
+  scrap)
+    mkdir -p tmp/scrap
+    local +x cmd="da_html.cr watch scrap-run $@"
+    ${=cmd} || :
+    process watch "-r bin -r sh -r src -r specs -r tmp/scrap" "$cmd"
+    ;;
+
+  scrap-run)
+    reset
+    sh_color ORANGE "=== {{Compiling}} ==="
+    my_crystal __ build tmp/scrap/scrap.cr -o tmp/scrap.cr
+    sh_color ORANGE "=== {{Running}}: $@"
+    tmp/scrap.cr $@
+    sh_color GREEN "=== {{DONE}} ==="
+    ;;
+
+  *)
+    echo "!!! Unknown arguments: $ORIGINAL_ARGS" >&2
+    exit 1
+    ;;
+
+esac
+

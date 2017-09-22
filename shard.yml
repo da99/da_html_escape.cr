@@ -1,0 +1,9 @@
+name: da_html
+version: 5.0.0
+
+dependencies:
+  myhtml:
+    github: kostya/myhtml
+    branch: master
+
+license: MIT

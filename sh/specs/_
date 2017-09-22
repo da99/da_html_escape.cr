@@ -1,0 +1,34 @@
+#!/usr/bin/env zsh
+#
+# === {{CMD}}
+#
+set -u -e -o pipefail
+
+local +x ORIGINAL_ARGS="$@"
+if [[ -z "$@" ]]; then
+  local +x ACTION="run"
+else
+  local +x ACTION=$1; shift
+fi
+
+case "$ACTION" in
+
+  run)
+    mkdir -p tmp/
+
+    sh_color ORANGE "=== Compiling specs..."
+    my_crystal __ build specs/da_html.cr -o tmp/da_html.specs
+
+    sh_color ORANGE "=== {{Running}}: tmp/da_html.specs $@ "
+    time tmp/da_html.specs $@
+
+    sh_color GREEN "=== {{DONE}} ===" >&2
+    ;;
+
+  *)
+    echo "!!! Unknown arguments: $ORIGINAL_ARGS" >&2
+    exit 1
+    ;;
+
+esac
+
