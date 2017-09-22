@@ -1,6 +1,10 @@
 
 describe ":unescape" do
 
+  it "should replace \"field separator\" (31 ASCII) with a space" do
+    assert_escape "a ", "a\u{1f}"
+  end # === it "should replace \"field separator\" with a space"
+
   it "should decode apos entity" do
     assert_unescape "é'", "&eacute;&apos;"
   end
