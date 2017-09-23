@@ -23,6 +23,26 @@ I use this because Crystal's standard lib's [HTML](https://crystal-lang.org/api/
 only escapes a few characters. I decide to play it extra safe
 and escape all non-ASCII characters.
 
+Also, [HTML.unescape and XML.parse\_html](https://github.com/crystal-lang/crystal/pull/3409)
+does not fully unescape certain chars. [kostya/myhtml](https://github.com/kostya/myhtml) is the only one that
+properly escapes the following into `<` brackets:
+
+```crystal
+    bracket = "
+      < &lt &lt; &LT &LT; &#60 &#060 &#0060
+      &#00060 &#000060 &#0000060 &#60; &#060; &#0060; &#00060;
+      &#000060; &#0000060; &#x3c &#x03c &#x003c &#x0003c &#x00003c
+      &#x000003c &#x3c; &#x03c; &#x003c; &#x0003c; &#x00003c;
+      &#x000003c; &#X3c &#X03c &#X003c &#X0003c &#X00003c &#X000003c
+      &#X3c; &#X03c; &#X003c; &#X0003c; &#X00003c; &#X000003c;
+      &#x3C &#x03C &#x003C &#x0003C &#x00003C &#x000003C &#x3C; &#x03C;
+      &#x003C; &#x0003C; &#x00003C; &#x000003C; &#X3C &#X03C
+      &#X003C &#X0003C &#X00003C &#X000003C &#X3C; &#X03C; &#X003C; &#X0003C;
+      &#X00003C; &#X000003C; \x3c \x3C \u003c \u003C
+    "
+```
+
+
 Notes:
 =========
 
