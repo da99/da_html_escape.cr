@@ -34,11 +34,5 @@ class The_Job
     end
   end # === def unescape_once
 
-  def all(cycles)
-    escape(cycles)
-    unescape_once(cycles)
-    unescape!(cycles)
-  end
-
 end # === The_Job
 
