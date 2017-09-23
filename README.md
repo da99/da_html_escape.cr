@@ -11,7 +11,7 @@ If you are still curious about this shard:
 
 HTML entity decoding is done by the [kostya/myhtml](https://github.com/kostya/myhtml) shard.
 
-Encoding characters into HTML entities is done by taking the codepoints and convert them
+Encoding characters into HTML entities is done by taking the codepoints and converting them
 to hexadecimal HTML entities. I ported segments of [HTMLEntities by Paul Battley](https://github.com/threedaymonk/htmlentities)
 for the encoding and most of the specs/tests.
 
@@ -51,6 +51,10 @@ Usage:
   # Unescaping:
   escaped = "&eacute;lan"
   DA_HTML.unescape_once(escaped) # => "élan"
+
+  # :unescape! keeps looping until it can no
+  # longer unescape any more:
+  escaped = "&amp;amp;amp;eacute;lan"
   DA_HTML.unescape!(escaped) # => "élan"
 ```
 
