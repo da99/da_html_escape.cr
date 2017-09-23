@@ -25,7 +25,7 @@ and escape all non-ASCII characters.
 
 Also, [HTML.unescape and XML.parse\_html](https://github.com/crystal-lang/crystal/pull/3409)
 does not fully unescape certain chars. [kostya/myhtml](https://github.com/kostya/myhtml) is the only one that
-properly escapes the following into `<` brackets:
+properly unescapes the following into `<` brackets:
 
 ```crystal
     bracket = "
