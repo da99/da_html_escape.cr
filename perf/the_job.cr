@@ -4,11 +4,11 @@ require "../src/da_html"
 class The_Job
 
   @encoded : String
+
   def initialize
-    @coder = DA_HTML
-    @raw = File.read("#{__DIR__}/sample")
-    @decoded = @raw
-    encoded = @coder.escape(@decoded)
+    @coder   = DA_HTML
+    @decoded = File.read("#{__DIR__}/sample")
+    encoded  = @coder.escape(@decoded)
     if encoded
       @encoded = encoded
     else
@@ -18,20 +18,26 @@ class The_Job
 
   def escape(cycles)
     cycles.times do
-      @coder.escape(@raw)
       @coder.escape(@decoded)
     end
   end
 
-  def unescape(cycles)
+  def unescape!(cycles)
     cycles.times do
       @coder.unescape!(@encoded)
     end
   end
 
+  def unescape_once(cycles)
+    cycles.times do
+      @coder.unescape_once(@encoded)
+    end
+  end # === def unescape_once
+
   def all(cycles)
     escape(cycles)
-    unescape(cycles)
+    unescape_once(cycles)
+    unescape!(cycles)
   end
 
 end # === The_Job
