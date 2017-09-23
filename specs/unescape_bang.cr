@@ -234,3 +234,28 @@ describe ":unescape! string encodings" do
 end # === desc ":unescape string encodings"
 
 
+describe ":unescape!" do # === Imported from Mu_Clean.
+
+  it "un-escapes until it can no longer escape." do
+    str = "Hello < Hello <"
+    assert str, :==, Mu_Clean.unescape_html(
+      3.times.reduce(str) { |acc, i| HTML.escape(acc) }
+    )
+  end
+
+  it "un-escapes escaped text mixed with HTML" do
+    s = "<p>Hi&amp;</p>";
+    assert "<p>Hi&</p>", :==, Mu_Clean.unescape_html(s);
+  end
+
+  hello_with_special_chars = "Hello & World ©®∆"
+  it "un-escapes special chars: \"#{hello_with_special_chars}\"" do
+    s = "Hello &amp; World &#169;&#174;&#8710;"
+    assert hello_with_special_chars, :==, Mu_Clean.unescape_html(s)
+  end
+
+  it "un-escapes all 70 different combos of '<'" do
+    assert "< %3C", :==, Mu_Clean.unescape_html(BRACKET).split.uniq.join(" ")
+  end
+
+end # === describe :un_e
