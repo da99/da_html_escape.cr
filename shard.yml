@@ -2,6 +2,9 @@ name: da_html
 version: 1.0.1
 
 dependencies:
+  da_string:
+    github: da99/da_string.cr
+    branch: master
   myhtml:
     github: kostya/myhtml
     branch: master

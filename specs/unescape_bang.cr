@@ -238,9 +238,9 @@ describe ":unescape!" do # === Imported from Mu_Clean.
 
   it "un-escapes until it can no longer escape." do
     str = "Hello < Hello <"
-    assert str, :==, Mu_Clean.unescape_html(
+    DA_HTML.unescape!(
       3.times.reduce(str) { |acc, i| HTML.escape(acc) }
-    )
+    ).should eq(str)
   end
 
   it "un-escapes escaped text mixed with HTML" do

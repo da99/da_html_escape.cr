@@ -18,7 +18,7 @@ module DA_HTML
   UNSAFE_ASCII_CODEPOINTS = "<>&'\"".codepoints
   ASCII_TABLE = Array(String | Nil).new("~".codepoints.first + 1, nil)
 
-  (SPACE_CODEPOINT..TILDA_CODEPOINT).each_with_index do |x, i|
+  (SPACE_CODEPOINT..TILDA_CODEPOINT).each do |x|
     next if UNSAFE_ASCII_CODEPOINTS.includes?(x)
     ASCII_TABLE[x] = [x.chr].join
   end
@@ -45,7 +45,7 @@ module DA_HTML
         DOUBLE_SPACE
       when 10 # 10 = new line
         NEW_LINE
-      when 0..31 # Control character
+      when 0..31, 127 # Control character
           SPACE
       else
         (ASCII_TABLE[x]? && ASCII_TABLE[x]) || CHAR_HEX[x]? || "&#x#{x.to_s(16)};"

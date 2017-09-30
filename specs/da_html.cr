@@ -75,7 +75,7 @@ def assert_not_nil( x )
   end
 end # === def assert_not_nil
 
-require "./unescape"
+require "./unescape_once"
 require "./unescape_bang"
 require "./escape"
 

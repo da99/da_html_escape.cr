@@ -15,17 +15,6 @@ fi
 local +x ACTION="$1"; shift
 case "$ACTION" in
 
-  specs)
-    local +x cmd="da_html.cr watch specs-run $@"
-    ${=cmd} || :
-    process watch "-r bin -r sh -r src -r specs" "$cmd"
-    ;;
-
-  specs-run)
-    reset
-    da_html.cr specs run $@
-    ;;
-
   scrap)
     mkdir -p tmp/scrap
     local +x cmd="da_html.cr watch scrap-run $@"

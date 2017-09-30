@@ -13,7 +13,14 @@ fi
 
 case "$ACTION" in
 
+  watch)
+    local +x cmd="da_html.cr specs run $@"
+    ${=cmd} || :
+    process watch "-r bin -r sh -r src -r specs" "$cmd"
+    ;;
+
   run)
+    reset
     mkdir -p tmp/
 
     sh_color ORANGE "=== Compiling specs..."
