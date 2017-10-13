@@ -1,7 +1,7 @@
 
 require "myhtml"
 
-module DA_HTML
+module DA_HTML_ESCAPE
 
   def unescape_once(source)
     return nil unless source.valid_encoding?
@@ -18,6 +18,6 @@ module DA_HTML
     unescape!(str)
   end # === def unescape
 
-end # === module DA_HTML
+end # === module DA_HTML_ESCAPE
 
 

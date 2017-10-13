@@ -1,5 +1,5 @@
 
-module DA_HTML
+module DA_HTML_ESCAPE
 
   macro to_hex_entity(str)
     "&#x#{{{str}}.codepoints.map { |x| x.to_s(16) }.join};"
@@ -55,5 +55,5 @@ module DA_HTML
     new_str.to_s
   end
 
-end # === module DA_HTML
+end # === module DA_HTML_ESCAPE
 

@@ -28,8 +28,8 @@ describe ":unescape" do
       ent     = {{x.first}}
       code    = {{x[1]}}
       decoded = {{x.last}}
-      assert_escape "&#x#{code.to_s(16)};", DA_HTML.unescape_once("&#{ent};")
-      assert_unescape decoded,                DA_HTML.escape(decoded)
+      assert_escape "&#x#{code.to_s(16)};", DA_HTML_ESCAPE.unescape_once("&#{ent};")
+      assert_unescape decoded,                DA_HTML_ESCAPE.escape(decoded)
     end
   {% end %}
 
@@ -37,28 +37,28 @@ describe ":unescape" do
     ent     = "&nsubE;"
     code    = [0x2ac5.to_i, 0x0338.to_i]
     decoded = "⫅̸"
-    assert_unescape decoded, DA_HTML.escape(decoded)
+    assert_unescape decoded, DA_HTML_ESCAPE.escape(decoded)
   end # === it "should round trip preferred entity: &nsubE; => "⫅̸""
 
   it "should round trip entity: &nsupE; => ⫆̸" do
     ent     = "&nsupE;"
     code    = [0x2ac6.to_i, 0x0338.to_i]
     decoded = "⫆̸"
-    assert_unescape decoded, DA_HTML.escape(decoded)
+    assert_unescape decoded, DA_HTML_ESCAPE.escape(decoded)
   end # === it "should round trip preferred entity: &nsupE; => ⫆̸"
 
   it "should round trip entity: &vsubnE;" do
     ent     = "&vsubnE;"
     code    = [0x2acb.to_i, 0xfe00.to_i]
     decoded = "⫋︀"
-    assert_unescape decoded, DA_HTML.escape(decoded)
+    assert_unescape decoded, DA_HTML_ESCAPE.escape(decoded)
   end # === it "should round trip preferred entity: &vsubnE;"
 
   it "should round trip entity: &vsubne;" do
     ent     = "&vsubne;"
     code    = [0x228a.to_i, 0xfe00.to_i]
     decoded = "⊊︀"
-    assert_unescape decoded, DA_HTML.escape(decoded)
+    assert_unescape decoded, DA_HTML_ESCAPE.escape(decoded)
   end # === it "should round trip preferred entity: &vsubnE;"
 
   it "should decode apos entity" do
@@ -99,7 +99,7 @@ describe ":unescape" do
   it "should not mutate string being decoded" do
     original = "&lt;&#163;"
     input = original.dup
-    DA_HTML.unescape_once(input)
+    DA_HTML_ESCAPE.unescape_once(input)
 
     input.should eq(original)
   end
@@ -130,7 +130,7 @@ describe ":unescape" do
 
   it "should decode null character to replacement character: \\u0000" do
     encoded = "&#x0;"
-    decoded = DA_HTML.unescape_once(encoded) || "error"
+    decoded = DA_HTML_ESCAPE.unescape_once(encoded) || "error"
     decoded.codepoints.should eq([65533])
   end
 
@@ -168,7 +168,7 @@ describe ":unescape" do
       &#X00003C; &#X000003C; \x3c \x3C \u003c \u003C
     "
 
-    expected = DA_HTML.unescape_once( bracket )
+    expected = DA_HTML_ESCAPE.unescape_once( bracket )
     if expected
       expected = expected.split.uniq.join
     end
@@ -183,7 +183,7 @@ describe ":unescape string encodings" do
     s = "&#x3c;&eacute;lan&#x3e;"
 
     assert_unescape "<élan>", s
-    assert_not_nil DA_HTML.unescape_once(s) do |x|
+    assert_not_nil DA_HTML_ESCAPE.unescape_once(s) do |x|
       x.valid_encoding?.should eq(true)
     end
   end
@@ -193,7 +193,7 @@ describe ":unescape string encodings" do
     s.valid_encoding?.should eq(true)
 
     assert_unescape "<élan>", s
-    assert_not_nil DA_HTML.unescape_once(s) do |x|
+    assert_not_nil DA_HTML_ESCAPE.unescape_once(s) do |x|
       x.valid_encoding?.should eq(true)
     end
   end
@@ -205,10 +205,10 @@ describe ":unescape string encodings" do
     str = String.new(slice, "GB2312")
 
     origin = "好"
-    encoded = DA_HTML.escape(origin)
+    encoded = DA_HTML_ESCAPE.escape(origin)
 
     assert_escape encoded, str
-    assert_not_nil DA_HTML.escape(str) do |x|
+    assert_not_nil DA_HTML_ESCAPE.escape(str) do |x|
       x.valid_encoding?.should eq(true)
     end
   end

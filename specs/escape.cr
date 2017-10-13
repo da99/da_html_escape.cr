@@ -58,7 +58,7 @@ describe ":escape" do
   it "should not mutate string being encoded" do
     original = "<£"
     input = original.dup
-    DA_HTML.escape(input)
+    DA_HTML_ESCAPE.escape(input)
 
     original.should eq( input )
   end
@@ -91,7 +91,7 @@ describe ":escape string encodings" do
   it "should encode utf8 to utf8 if needed" do
     s =  "<élan>"
     assert_escape "&#x3c;&#xe9;lan&#x3e;", s
-    assert_not_nil DA_HTML.escape(s) do |x|
+    assert_not_nil DA_HTML_ESCAPE.escape(s) do |x|
       x.valid_encoding?.should eq(true)
     end
   end
@@ -106,7 +106,7 @@ describe ":escape string encodings" do
     slice[1]  = 65_u8
     s = String.new(slice)
 
-    DA_HTML.escape(s).should eq(nil)
+    DA_HTML_ESCAPE.escape(s).should eq(nil)
   end
 
 end # === desc ":escape string encodings"
@@ -117,99 +117,30 @@ describe ":escape" do # === Imported from Mu_Clean
 
   it "escapes the tag related chars: #{escape_tag_chars}" do
     target = "&amp; &lt; &gt; &quot; &#x27; &#x2F;"
-    assert target , :==, Mu_Clean.escape_html(escape_tag_chars)
+    DA_HTML_ESCAPE.escape(escape_tag_chars)
+      .should eq(target)
   end # === it "escapes the following characters: "
 
   it "does not re-escape already escaped text mixed with HTML" do
     html = "<p>Hi</p>";
-    escaped = Mu_Clean.escape_html(html);
-    assert Mu_Clean.escape_html(escaped + html), :==, Mu_Clean.escape_html(html + html)
+    escaped = DA_HTML_ESCAPE.escape(html) || ""
+    DA_HTML_ESCAPE.escape(escaped + html)
+      .should eq(DA_HTML_ESCAPE.escape(html + html))
   end
 
   it "escapes special chars: \"Hello ©®∆\"" do
     s = "Hello & World ©®∆"
     t = "Hello &amp; World &#169;&#174;&#8710;"
     t = "Hello &amp; World &copy;&reg;&#x2206;"
-    assert t, :==, Mu_Clean.escape_html(s)
+    DA_HTML_ESCAPE.escape(s)
+      .should eq(t)
   end
 
   it "escapes all 70 different combos of '<'" do
-    assert "&lt; %3C", :==, Mu_Clean.escape_html(BRACKET).split.uniq.join(" ")
+    (DA_HTML_ESCAPE.escape(BRACKET) || "").split.uniq.join(" ")
+      .should eq("&lt; %3C")
   end
 
-  it "escapes all keys in nested objects" do
-    html = "<b>test</b>"
-    t    = {" a &gt;" => {" a &gt;" => Mu_Clean.escape_html(html) }}
-    assert t, :==, Mu_Clean.escape_html({" a >" => {" a >" => html}})
-  end
-
-  it "escapes all values in nested objects" do
-    html = "<b>test</b>"
-    t    = {name: {name: Mu_Clean.escape_html(html)}}
-    assert t, :==, Mu_Clean.escape_html({name:{name: html}})
-  end
-
-  it "escapes all values in nested arrays" do
-    html = "<b>test</b>"
-    assert [{name: {name: Mu_Clean.escape_html(html)}}], :==, Mu_Clean.escape_html([{name:{name: html}}])
-  end
-
-  "uri url href".split.each { |k| # ==============================================
-
-    it "escapes values of keys :#{k} that are valid /path" do
-      a = {:key=>{:"#{k}" => "/path/mine/&"}}
-      t = {:key=>{:"#{k}" => "/path/mine/&amp;"}}
-      assert t, :==, Mu_Clean.escape_html(a)
-    end
-
-    it "sets nil any keys ending with :#{k} and have invalid uri" do
-      a = {:key=>{"#{k}" => "javascript:alert(s)"}}
-      t = {:key=>{"#{k}" => nil                  }}
-      assert t, :==, Mu_Clean.escape_html(a)
-    end
-
-    it "sets nil any keys ending with _#{k} and have invalid uri" do
-      a = {:key=>{"my_#{k}" => "javascript:alert(s)"}}
-      t = {:key=>{"my_#{k}" => nil                  }}
-      assert t, :==, Mu_Clean.escape_html(a)
-    end
-
-    it "escapes values of keys with _#{k} that are valid https uri" do
-      a = {:key=>{"my_#{k}" => "https://www.yahoo.com/&"}}
-      t = {:key=>{"my_#{k}" => "https://www.yahoo.com/&amp;"}}
-      assert t, :==, Mu_Clean.escape_html(a)
-    end
-
-    it "escapes values of keys with _#{k} that are valid uri" do
-      a = {:key=>{"my_#{k}" => "http://www.yahoo.com/&"}}
-      t = {:key=>{"my_#{k}" => "http://www.yahoo.com/&amp;"}}
-      assert t, :==, Mu_Clean.escape_html(a)
-    end
-
-    it "escapes values of keys ending with _#{k} that are valid /path" do
-      a = {:key=>{"my_#{k}" => "/path/mine/&"}}
-      t = {:key=>{"my_#{k}" => "/path/mine/&amp;"}}
-      assert t, :==, Mu_Clean.escape_html(a)
-    end
-
-    it "allows unicode uris" do
-      a = {:key=>{"my_#{k}" => "http://кц.рф"}}
-      t = {:key=>{"my_#{k}" => "http://&#x43a;&#x446;.&#x440;&#x444;"}}
-      assert t, :==, Mu_Clean.escape_html(a)
-    end
-  }
-
-  [true, false].each do |v|
-    it "does not escape #{v.inspect}" do
-      a = {"something"=>v}
-      assert a, :==, Mu_Clean.escape_html(a)
-    end
-  end
-
-  it "does not escape numbers" do
-    a = {"something"=>1.to_i64}
-    assert a, :==, Mu_Clean.escape_html(a)
-  end
 
 end # === end desc
 

@@ -1,4 +1,19 @@
 
+require "html"
+
+    BRACKET = "
+      < &lt &lt; &LT &LT; &amp;#60 &#60 &#060 &#0060
+      &#00060 &#000060 &#0000060 &#60; &#060; &#0060; &#00060;
+      &#000060; &#0000060; &#x3c &#x03c &#x003c &#x0003c &#x00003c
+      &#x000003c &#x3c; &amp;#x03c; &#x003c; &#x0003c; &#x00003c;
+      &#x000003c; &#X3c &#X03c &#X003c &#X0003c &#X00003c &#X000003c
+      &#X3c; &#X03c; &#X003c; &amp;amp;#X0003c; &#X00003c; &#X000003c;
+      &#x3C &#x03C &#x003C &#x0003C &#x00003C &#x000003C &#x3C; &#x03C;
+      &#x003C; &#x0003C; &#x00003C; &#x000003C; &#X3C &#X03C
+      &#X003C &#X0003C &#X00003C &#X000003C &#X3C; &#X03C; &#X003C; &#X0003C;
+      &#X00003C; &#X000003C; \x3c \x3C \u003c \u003C
+    "
+
 describe ":unescape!" do
 
   it "should replace \"unit separator\" (31 ASCII) with a space" do
@@ -28,8 +43,8 @@ describe ":unescape!" do
       ent     = {{x.first}}
       code    = {{x[1]}}
       decoded = {{x.last}}
-      assert_escape "&#x#{code.to_s(16)};", DA_HTML.unescape!("&amp;amp;amp;#{ent};")
-      assert_unescape! decoded,             DA_HTML.escape(decoded)
+      assert_escape "&#x#{code.to_s(16)};", DA_HTML_ESCAPE.unescape!("&amp;amp;amp;#{ent};")
+      assert_unescape! decoded,             DA_HTML_ESCAPE.escape(decoded)
     end
   {% end %}
 
@@ -37,28 +52,28 @@ describe ":unescape!" do
     ent     = "&nsubE;"
     code    = [0x2ac5.to_i, 0x0338.to_i]
     decoded = "⫅̸"
-    assert_unescape! decoded, DA_HTML.escape(decoded)
+    assert_unescape! decoded, DA_HTML_ESCAPE.escape(decoded)
   end # === it "should round trip preferred entity: &nsubE; => "⫅̸""
 
   it "should round trip entity: &nsupE; => ⫆̸" do
     ent     = "&nsupE;"
     code    = [0x2ac6.to_i, 0x0338.to_i]
     decoded = "⫆̸"
-    assert_unescape! decoded, DA_HTML.escape(decoded)
+    assert_unescape! decoded, DA_HTML_ESCAPE.escape(decoded)
   end # === it "should round trip preferred entity: &nsupE; => ⫆̸"
 
   it "should round trip entity: &vsubnE;" do
     ent     = "&vsubnE;"
     code    = [0x2acb.to_i, 0xfe00.to_i]
     decoded = "⫋︀"
-    assert_unescape! decoded, DA_HTML.escape(decoded)
+    assert_unescape! decoded, DA_HTML_ESCAPE.escape(decoded)
   end # === it "should round trip preferred entity: &vsubnE;"
 
   it "should round trip entity: &vsubne;" do
     ent     = "&vsubne;"
     code    = [0x228a.to_i, 0xfe00.to_i]
     decoded = "⊊︀"
-    assert_unescape! decoded, DA_HTML.escape(decoded)
+    assert_unescape! decoded, DA_HTML_ESCAPE.escape(decoded)
   end # === it "should round trip preferred entity: &vsubnE;"
 
   it "should decode apos entity" do
@@ -99,7 +114,7 @@ describe ":unescape!" do
   it "should not mutate string being decoded" do
     original = "&amp;lt;&#163;"
     input = original.dup
-    DA_HTML.unescape!(input)
+    DA_HTML_ESCAPE.unescape!(input)
 
     input.should eq(original)
   end
@@ -130,7 +145,7 @@ describe ":unescape!" do
 
   it "should decode null character to replacement character: \\u0000" do
     encoded = "&amp;amp;#x0;"
-    decoded = DA_HTML.unescape!(encoded) || "error"
+    decoded = DA_HTML_ESCAPE.unescape!(encoded) || "error"
     decoded.codepoints.should eq([65533])
   end
 
@@ -173,20 +188,7 @@ describe ":unescape!" do
 
   it "should decode invalid brackets" do
     # %3C 
-    bracket = "
-      < &lt &lt; &LT &LT; &amp;#60 &#60 &#060 &#0060
-      &#00060 &#000060 &#0000060 &#60; &#060; &#0060; &#00060;
-      &#000060; &#0000060; &#x3c &#x03c &#x003c &#x0003c &#x00003c
-      &#x000003c &#x3c; &amp;#x03c; &#x003c; &#x0003c; &#x00003c;
-      &#x000003c; &#X3c &#X03c &#X003c &#X0003c &#X00003c &#X000003c
-      &#X3c; &#X03c; &#X003c; &amp;amp;#X0003c; &#X00003c; &#X000003c;
-      &#x3C &#x03C &#x003C &#x0003C &#x00003C &#x000003C &#x3C; &#x03C;
-      &#x003C; &#x0003C; &#x00003C; &#x000003C; &#X3C &#X03C
-      &#X003C &#X0003C &#X00003C &#X000003C &#X3C; &#X03C; &#X003C; &#X0003C;
-      &#X00003C; &#X000003C; \x3c \x3C \u003c \u003C
-    "
-
-    expected = DA_HTML.unescape!( bracket )
+    expected = DA_HTML_ESCAPE.unescape!( BRACKET )
     if expected
       expected = expected.split.uniq.join
     end
@@ -201,7 +203,7 @@ describe ":unescape! string encodings" do
     s = "&#x3c;&eacute;lan&#x3e;"
 
     assert_unescape! "<élan>", s
-    assert_not_nil DA_HTML.unescape!(s) do |x|
+    assert_not_nil DA_HTML_ESCAPE.unescape!(s) do |x|
       x.valid_encoding?.should eq(true)
     end
   end
@@ -211,7 +213,7 @@ describe ":unescape! string encodings" do
     s.valid_encoding?.should eq(true)
 
     assert_unescape! "<élan>", s
-    assert_not_nil DA_HTML.unescape!(s) do |x|
+    assert_not_nil DA_HTML_ESCAPE.unescape!(s) do |x|
       x.valid_encoding?.should eq(true)
     end
   end
@@ -223,10 +225,10 @@ describe ":unescape! string encodings" do
     str = String.new(slice, "GB2312")
 
     origin = "好"
-    encoded = DA_HTML.escape(origin)
+    encoded = DA_HTML_ESCAPE.escape(origin)
 
     assert_escape encoded, str
-    assert_not_nil DA_HTML.escape(str) do |x|
+    assert_not_nil DA_HTML_ESCAPE.escape(str) do |x|
       x.valid_encoding?.should eq(true)
     end
   end
@@ -238,24 +240,28 @@ describe ":unescape!" do # === Imported from Mu_Clean.
 
   it "un-escapes until it can no longer escape." do
     str = "Hello < Hello <"
-    DA_HTML.unescape!(
+    DA_HTML_ESCAPE.unescape!(
       3.times.reduce(str) { |acc, i| HTML.escape(acc) }
     ).should eq(str)
   end
 
   it "un-escapes escaped text mixed with HTML" do
     s = "<p>Hi&amp;</p>";
-    assert "<p>Hi&</p>", :==, Mu_Clean.unescape_html(s);
+    DA_HTML_ESCAPE.unescape!(s)
+      .should eq("<p>Hi&</p>")
   end
 
   hello_with_special_chars = "Hello & World ©®∆"
   it "un-escapes special chars: \"#{hello_with_special_chars}\"" do
     s = "Hello &amp; World &#169;&#174;&#8710;"
-    assert hello_with_special_chars, :==, Mu_Clean.unescape_html(s)
+    DA_HTML_ESCAPE.unescape!(s)
+      .should eq(hello_with_special_chars)
   end
 
   it "un-escapes all 70 different combos of '<'" do
-    assert "< %3C", :==, Mu_Clean.unescape_html(BRACKET).split.uniq.join(" ")
+    (DA_HTML_ESCAPE.unescape!(BRACKET) || "")
+      .split.uniq.join(" ")
+      .should eq("< %3C")
   end
 
 end # === describe :un_e

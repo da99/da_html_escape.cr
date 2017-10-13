@@ -1,5 +1,5 @@
 
-module DA_HTML
+module DA_HTML_ESCAPE
 
   extend self
 
@@ -19,7 +19,7 @@ module DA_HTML
     s.gsub(TAB, DOUBLE_SPACE).gsub(CNTRL_CHAR_REGEX, SPACE)
   end # === def clean
 
-end # === class DA_HTML
+end # === class DA_HTML_ESCAPE
 
 require "./unescape"
 require "./escape"

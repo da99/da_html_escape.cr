@@ -14,7 +14,7 @@ fi
 case "$ACTION" in
 
   watch)
-    local +x cmd="da_html.cr specs run $@"
+    local +x cmd="html_escape.cr specs run $@"
     ${=cmd} || :
     process watch "-r bin -r sh -r src -r specs" "$cmd"
     ;;
@@ -24,10 +24,10 @@ case "$ACTION" in
     mkdir -p tmp/
 
     sh_color ORANGE "=== Compiling specs..."
-    my_crystal __ build specs/da_html.cr -o tmp/da_html.specs
+    my_crystal __ build specs/da_html_escape.cr -o tmp/da_html_escape.specs
 
-    sh_color ORANGE "=== {{Running}}: tmp/da_html.specs $@ "
-    time tmp/da_html.specs $@
+    sh_color ORANGE "=== {{Running}}: tmp/da_html_escape.specs $@ "
+    time tmp/da_html_escape.specs $@
 
     sh_color GREEN "=== {{DONE}} ===" >&2
     ;;

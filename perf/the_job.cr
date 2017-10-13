@@ -1,12 +1,12 @@
 
-require "../src/da_html"
+require "../src/da_html_escape"
 
 class The_Job
 
   @encoded : String
 
   def initialize
-    @coder   = DA_HTML
+    @coder   = DA_HTML_ESCAPE
     @decoded = File.read("#{__DIR__}/sample")
     encoded  = @coder.escape(@decoded)
     if encoded

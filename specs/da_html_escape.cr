@@ -1,5 +1,5 @@
 
-require "../src/da_html"
+require "../src/da_html_escape"
 require "spec"
 
   TEST_ENTITIES_SET = [
@@ -37,7 +37,7 @@ macro assert_escape(expected, input)
   expected = {{expected}}
   actual   = {{input}}
   if actual.is_a?(String)
-    ( DA_HTML.escape(actual) ).should eq(expected)
+    ( DA_HTML_ESCAPE.escape(actual) ).should eq(expected)
   else
     actual.should eq(expected)
   end
@@ -47,7 +47,7 @@ macro assert_unescape(expected, input)
   expected = {{expected}}
   actual   = {{input}}
   if actual.is_a? String
-    ( DA_HTML.unescape_once(actual) ).should eq(expected)
+    ( DA_HTML_ESCAPE.unescape_once(actual) ).should eq(expected)
   else
     actual.should eq(expected)
   end
@@ -57,7 +57,7 @@ macro assert_unescape!(expected, input)
   expected = {{expected}}
   actual   = {{input}}
   if actual.is_a? String
-    ( DA_HTML.unescape!(actual) ).should eq(expected)
+    ( DA_HTML_ESCAPE.unescape!(actual) ).should eq(expected)
   else
     actual.should eq(expected)
   end

@@ -62,33 +62,33 @@ Usage:
 =======
 
 ```crystal
-  require "da_html"
+  require "da_html_escape"
 
   # Escape unsafe/non-ASCII codepoints using hexadecimal entities:
   raw = "<élan>"
-  DA_HTML.escape(raw) # => "&#x3c;&#xe9;lan&#x3e;"
+  DA_HTML_ESCAPE.escape(raw) # => "&#x3c;&#xe9;lan&#x3e;"
 
   # Unescaping:
   escaped = "&eacute;lan"
-  DA_HTML.unescape_once(escaped) # => "élan"
+  DA_HTML_ESCAPE.unescape_once(escaped) # => "élan"
 
   # :unescape! keeps looping until it can no
   # longer unescape any more:
   escaped = "&amp;amp;amp;eacute;lan"
-  DA_HTML.unescape!(escaped) # => "élan"
+  DA_HTML_ESCAPE.unescape!(escaped) # => "élan"
 ```
 
 ## Licence
 
 This code is free to use under the terms of the MIT licence. See the file
-[LICENSE](https://github.com/da99/da_html.cr/blob/master/LICENSE) for more details.
+[LICENSE](https://github.com/da99/html_escape.cr/blob/master/LICENSE) for more details.
 
 
 ## Useless Benchmarks:
 
 NOTE: Encoding is twice as slow as using `HTML.escape`
 from the Crystal standard library. The main reason is
-because `DA_HTML` replaces control characters with spaces
+because `DA_HTML_ESCAPE` replaces control characters with spaces
 and non-ASCII chars with hexadecimal HTML entities.
 
 ```

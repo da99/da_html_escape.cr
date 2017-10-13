@@ -17,7 +17,7 @@ case "$ACTION" in
 
   scrap)
     mkdir -p tmp/scrap
-    local +x cmd="da_html.cr watch scrap-run $@"
+    local +x cmd="html_escape.cr watch scrap-run $@"
     ${=cmd} || :
     process watch "-r bin -r sh -r src -r specs -r tmp/scrap" "$cmd"
     ;;
