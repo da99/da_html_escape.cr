@@ -81,7 +81,7 @@ Usage:
 ## Licence
 
 This code is free to use under the terms of the MIT licence. See the file
-[LICENSE](https://github.com/da99/html_escape.cr/blob/master/LICENSE) for more details.
+[LICENSE](https://github.com/da99/da_html_escape.cr/blob/master/LICENSE) for more details.
 
 
 ## Useless Benchmarks:
