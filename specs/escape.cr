@@ -116,31 +116,29 @@ describe ":escape" do # === Imported from Mu_Clean
   escape_tag_chars = "& < > \" ' /"
 
   it "escapes the tag related chars: #{escape_tag_chars}" do
-    target = "&amp; &lt; &gt; &quot; &#x27; &#x2F;"
+    target = "&#x26; &#x3c; &#x3e; &#x22; &#x27; /"
     DA_HTML_ESCAPE.escape(escape_tag_chars)
       .should eq(target)
   end # === it "escapes the following characters: "
 
-  it "does not re-escape already escaped text mixed with HTML" do
+  it "re-escapes already escaped text mixed with HTML" do
     html = "<p>Hi</p>";
-    escaped = DA_HTML_ESCAPE.escape(html) || ""
-    DA_HTML_ESCAPE.escape(escaped + html)
-      .should eq(DA_HTML_ESCAPE.escape(html + html))
+    escaped = "&#x26;#x3c;p&#x26;#x3e;Hi&#x26;#x3c;/p&#x26;#x3e;"
+    DA_HTML_ESCAPE.escape(DA_HTML_ESCAPE.escape(html) || "")
+      .should eq(escaped)
   end
 
   it "escapes special chars: \"Hello ©®∆\"" do
     s = "Hello & World ©®∆"
-    t = "Hello &amp; World &#169;&#174;&#8710;"
-    t = "Hello &amp; World &copy;&reg;&#x2206;"
+    t = "Hello &#x26; World &#xa9;&#xae;&#x2206;"
     DA_HTML_ESCAPE.escape(s)
       .should eq(t)
   end
 
-  it "escapes all 70 different combos of '<'" do
-    (DA_HTML_ESCAPE.escape(BRACKET) || "").split.uniq.join(" ")
-      .should eq("&lt; %3C")
+  it "escapes Unicode '<'" do
+    (DA_HTML_ESCAPE.escape("< \x3c \x3C \u003c \u003C") || "").split.uniq.join(" ")
+      .should eq("&#x3c;")
   end
-
 
 end # === end desc
 

@@ -1,6 +1,7 @@
 
 require "html"
 
+    # %3C
     BRACKET = "
       < &lt &lt; &LT &LT; &amp;#60 &#60 &#060 &#0060
       &#00060 &#000060 &#0000060 &#60; &#060; &#0060; &#00060;
@@ -261,7 +262,7 @@ describe ":unescape!" do # === Imported from Mu_Clean.
   it "un-escapes all 70 different combos of '<'" do
     (DA_HTML_ESCAPE.unescape!(BRACKET) || "")
       .split.uniq.join(" ")
-      .should eq("< %3C")
+      .should eq("<")
   end
 
 end # === describe :un_e

@@ -6,7 +6,7 @@ set -u -e -o pipefail
 
 local +x ORIGINAL_ARGS="$@"
 if [[ -z "$@" ]]; then
-  local +x ACTION="run"
+  local +x ACTION="watch"
 else
   local +x ACTION=$1; shift
 fi
