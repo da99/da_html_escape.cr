@@ -1,6 +1,6 @@
+---
 name: da_html_escape
-version: 3.0.0
-
+version: 3.0.1
 dependencies:
   da_string:
     github: da99/da_string.cr
@@ -8,5 +8,4 @@ dependencies:
   myhtml:
     github: kostya/myhtml
     branch: master
-
 license: MIT
