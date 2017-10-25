@@ -1,4 +1,4 @@
-da\_html.cr
+da\_html\_escape.cr
 ============
 
 DA\_HTML is a Crystal shard to escape/unescape HTML.
