@@ -23,7 +23,7 @@ case "$ACTION" in
     reset
     mkdir -p tmp/
 
-    sh_color ORANGE "=== Compiling specs..."
+    sh_color ORANGE "=== {{Compiling}} specs..."
     my_crystal __ build specs/da_html_escape.cr -o tmp/da_html_escape.specs
 
     sh_color ORANGE "=== {{Running}}: tmp/da_html_escape.specs $@ "

@@ -15,7 +15,7 @@ module DA_HTML_ESCAPE
   NEW_LINE_CODEPOINT = to_int32("\n")
   TAB_CODEPOINT = to_int32("\t")
 
-  UNSAFE_ASCII_CODEPOINTS = "<>&'\"".codepoints
+  UNSAFE_ASCII_CODEPOINTS = "<>&'\"`{}".codepoints
   ASCII_TABLE = Array(String | Nil).new("~".codepoints.first + 1, nil)
 
   (SPACE_CODEPOINT..TILDA_CODEPOINT).each do |x|
@@ -32,7 +32,10 @@ module DA_HTML_ESCAPE
     to_int32(">")  => to_hex_entity(">"),
     to_int32("'")  => to_hex_entity("'"),
     to_int32("\"") => to_hex_entity("\""),
-    to_int32("&")  => to_hex_entity("&")
+    to_int32("&")  => to_hex_entity("&"),
+    to_int32("`")  => to_hex_entity("`"),
+    to_int32("{")  => to_hex_entity("{"),
+    to_int32("}")  => to_hex_entity("}")
   }
 
   def escape(source : String)
@@ -40,16 +43,18 @@ module DA_HTML_ESCAPE
     new_str = IO::Memory.new
     source.codepoints.each { |x|
 
-      new_str << case x
+      new_str.<<(
+        case x
       when 9 # tab
         DOUBLE_SPACE
       when 10 # 10 = new line
         NEW_LINE
       when 0..31, 127 # Control character
-          SPACE
+        SPACE
       else
         (ASCII_TABLE[x]? && ASCII_TABLE[x]) || CHAR_HEX[x]? || "&#x#{x.to_s(16)};"
       end
+      )
 
     }
     new_str.to_s

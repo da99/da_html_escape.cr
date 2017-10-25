@@ -13,6 +13,10 @@ describe ":escape" do
     assert_escape "&#x3c;&#xe9;lan&#x3e;", "<élan>"
   end
 
+  it "should encode backticks" do
+    assert_escape "&#x60; a &#x60;", "` a `"
+  end # === it "should encode backticks"
+
   it "should encode basic entities to hexadecimal" do
     assert_escape "&#x26;", "&"
     assert_escape "&#x22;", "\""
@@ -47,7 +51,9 @@ describe ":escape" do
   end
 
   it "should not encode normal ASCII" do
-    assert_escape "`", "`"
+    assert_escape "%", "%"
+    assert_escape "*", "*"
+    assert_escape "y", "y"
     assert_escape " ", " "
   end
 
