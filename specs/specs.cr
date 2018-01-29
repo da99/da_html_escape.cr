@@ -173,4 +173,18 @@ describe ":escape" do # === Imported from Mu_Clean
 
 end # === end desc
 
+describe "Custom container: IO::Memory.new" do
+  it "returns the original container" do
+    t = IO::Memory.new
+    actual = DA_HTML_ESCAPE.escape("<abc>", t)
+    assert actual == t
+  end # === it "returns the original container"
+
+  it "adds the content to the container" do
+    t = IO::Memory.new
+    actual = DA_HTML_ESCAPE.escape("<abc>", t).to_s
+    assert actual == "&#x3c;abc&#x3e;"
+  end # === it "adds the content to the container"
+end # === desc "Custom container: IO::Memory.new"
+
 

@@ -2,7 +2,7 @@
 module DA_HTML_ESCAPE
 
   class Error < Exception
-  end
+  end # === class Error
 
   TAB          = "\t"
   DOUBLE_SPACE = "  "
@@ -48,17 +48,16 @@ module DA_HTML_ESCAPE
     "&\#x#{x.to_s(16)};"
   end # === def self.to_hex_entity
 
-  def self.to_int32(s)
-    s.codepoints.first
-  end # === macro to_int32
-
   def self.escape(source : String)
+    self.escape(source, IO::Memory.new).to_s
+  end # === def self.escape
+
+  def self.escape(source : String, target)
     raise Error.new("Invalid encoding.") if !source.valid_encoding?
 
-    new_str = IO::Memory.new
     source.codepoints.each { |x|
 
-      new_str.<<(
+      target.<<(
         {% begin %}
           case x
             {% for x in MACRO_UNSAFE_CHARS %}
@@ -80,8 +79,9 @@ module DA_HTML_ESCAPE
       )
 
     }
-    new_str.to_s
-  end
+
+    target
+  end # === def self.escape
 
 end # === module DA_HTML_ESCAPE
 
