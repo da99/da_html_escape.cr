@@ -1,7 +1,5 @@
----
 name: da_html_escape
 version: 4.0.0
-license: MIT
 dependencies:
   da_string:
     github: da99/da_string.cr
