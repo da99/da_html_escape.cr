@@ -1,9 +1,12 @@
 ---
 name: da_html_escape
 version: 3.0.2
+license: MIT
 dependencies:
   da_string:
     github: da99/da_string.cr
-  myhtml:
-    github: kostya/myhtml
-license: MIT
+development_dependencies:
+  inspect_bang:
+    github: da99/inspect_bang.cr
+  da_spec:
+    github: da99/da_spec.cr

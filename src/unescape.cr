@@ -1,4 +1,6 @@
 
+  # myhtml:
+  #   github: kostya/myhtml
 require "myhtml"
 
 module DA_HTML_ESCAPE

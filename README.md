@@ -49,6 +49,9 @@ Notes:
 Further security info:
 [OSWAP: Cross Site Prevention](https://goo.gl/Rka7pX)
 
+ASCII Table:
+* [http://www.asciitable.com](http://www.asciitable.com)
+
 List of hexadecimal entities with counterpart codepoints:
 * [http://www.howtocreate.co.uk/sidehtmlentity.html](http://www.howtocreate.co.uk/sidehtmlentity.html)
 * [https://dev.w3.org/html5/html-author/charref](https://dev.w3.org/html5/html-author/charref)

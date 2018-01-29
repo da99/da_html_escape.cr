@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 #
-# === {{CMD}}
+# === {{CMD}} watch|run
 #
 set -u -e -o pipefail
 
@@ -21,13 +21,13 @@ case "$ACTION" in
 
   run)
     reset
-    mkdir -p tmp/
+    mkdir -p tmp/out
 
     sh_color ORANGE "=== {{Compiling}} specs..."
-    my_crystal __ build specs/da_html_escape.cr -o tmp/da_html_escape.specs
+    my_crystal __ build specs/specs.cr -o tmp/out/specs
 
     sh_color ORANGE "=== {{Running}}: tmp/da_html_escape.specs $@ "
-    time tmp/da_html_escape.specs $@
+    time tmp/out/specs $@
 
     sh_color GREEN "=== {{DONE}} ===" >&2
     ;;
